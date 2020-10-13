@@ -5,7 +5,7 @@
 """
 import os
 import glob
-
+import pprint
 
 def get_table(file_name):
     table_data = {}
@@ -31,7 +31,10 @@ if __name__ == '__main__':
         data[block_name] = table
         data_reverse[block_name] = table_reverse
 
-    print(data_reverse)
+    # print(data_reverse)
+    pprint.pprint(data_reverse)
+    # print(data_reverse.keys())
+    # print(len(data_reverse.keys()))
 
 
 
