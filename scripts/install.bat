@@ -1,0 +1,1 @@
+pip3 install tushare mootdx pandas pendulum falcon waitress -i https://pypi.tuna.tsinghua.edu.cn/simple
