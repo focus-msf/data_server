@@ -89,8 +89,10 @@ class BlockResource:
 
         begin, end = self.get_time(req.params['q[]'])
         block = req.params['block']
+        print("获取 参数 *{}*".format(block))
 
         data = self.get_data(begin, end, block)
+        print('查询完毕，返回数据')
         data = json.dumps(data, ensure_ascii=False)
 
         # 允许跨域访问
@@ -122,14 +124,16 @@ class BlockResource:
         """
         # init and transfer
 
-        print("开始获取数据")
+        print("查询数据中")
         # 获取板块指数数据
         data = {}
         data_c = DataCollector(begin)
         block_symbol = inustry_symbol_table_reverse[block]
+        print('查询指数数据')
         data[block] = IndexResource.format_data(data_c.get_index_k_data(symbol=block_symbol,begin=begin,end=end))
 
         # 获取板块内股票数据
+        # 构造时间
         start = pendulum.parse(begin).format('YYYYMMDD')
         stop = pendulum.parse(end).format('YYYYMMDD')
 
@@ -137,6 +141,7 @@ class BlockResource:
         for name, symbol in stock_table[block].items():
             symbol_list.append(symbol)
 
+        print('查询股票数据')
         stock_data = self.get_stock_data_with_symbol_list(symbol_list, start, stop)
 
 
@@ -163,6 +168,8 @@ class BlockResource:
         data = []
         for each_symbol in symbol_list:
             each_stock_data = get_stock_k_data(each_symbol,begin,stop)
+            if each_stock_data is None:
+                continue
             data.append(each_stock_data)
         all_stock_data = pd.concat(data)
         return all_stock_data

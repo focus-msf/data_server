@@ -9,7 +9,7 @@ import pendulum
 import tushare as ts
 
 from util import time_format_1,symbol_format
-
+from CONSTANT import ts_code_table
 
 ts.set_token('df1add767608a3a3481997959084b942014f8ebb218878d631e5fc8b')
 
@@ -102,7 +102,7 @@ class DataCollector:
     def get_stock_k_data(self,symbol="000001,000002", begin="20150703", end="20170710"):
 
         # change
-        symbol = symbol_format(symbol)
+        symbol = ts_code_table[symbol]
 
         pro = ts.pro_api()
         df = pro.daily(ts_code=symbol, start_date=begin, end_date=end)
@@ -119,14 +119,19 @@ class DataCollector:
             my_data.append([row[1][11],row[1][0],row[1][1],row[1][3],row[1][2]])
         return my_data
 
-def get_stock_k_data(symbol="000001,000002", begin="20150703", end="20170710"):
+def get_stock_k_data(symbol, begin, end):
 
     # change
-    symbol = symbol_format(symbol)
+    symbol = ts_code_table.get(symbol)
+    if symbol is None:
+        return None
 
     pro = ts.pro_api()
     df = pro.daily(ts_code=symbol, start_date=begin, end_date=end)
     return df
+
+
+
 
 if __name__ == "__main__":
     # begin = pendulum.parse('2017-09-25')
@@ -135,15 +140,15 @@ if __name__ == "__main__":
 
     # data = get_index_k_data()
     # symbol_str = "000166,000686,000712,000728,000750,000776,000783,002500,002670,002673,002736,002797,002926,002939,002945,300059,601990,601901,601881,601878,601788,601696,601688,601555,601456,601377,601375,601236,601211,601198,601162,601108,601099,601066,600999,600958,600918,600909,600864,600837,600621,600369,600155,600109,600095,600061,600030"
-
-    ["2017-09-01", "2020-09-30"]
-    symbol_str = "000686"
+    # ["2020-06-02", "2020-09-04"]
+    # ["2017-09-01", "2020-09-30"]
+    symbol_str = "603706"
     # start = '20200901'
-    start = '20170901'
+    start = '20200602'
     # stop = '20200930'
-    stop = '20200930'
+    stop = '20200904'
     data = get_stock_k_data(symbol_str,start,stop)
-    data_per_stock = (data[data['ts_code'] == '000166.SZ']).loc[:,
+    data_per_stock = (data[data['ts_code'] == '002469.SZ']).loc[:,
                      ['trade_date', 'open', 'close', 'low', 'high']]
     data = []
     for index, row in data_per_stock.iterrows():

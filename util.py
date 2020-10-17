@@ -8,6 +8,8 @@ def symbol_format(symbol):
     res = []
 
     for each in symbol_list:
+        if each.startswith("603"):
+            res.append(each+".SH")
         if each.startswith("601"):
             res.append(each+".SH")
         if each.startswith("600"):
