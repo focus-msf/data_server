@@ -50,9 +50,11 @@ class IndexResource(object):
         }
         :return: 
         """
+        print('开始获取各指数信息')
         data = {}
         data_c = DataCollector(begin)
         for name, symbol in inustry_symbol_table_reverse.items():
+            print("获取 {} 数据".format(name))
             data[name] = IndexResource.format_data(data_c.get_index_k_data(symbol=symbol,begin=begin,end=end))
 
         return data
@@ -139,6 +141,8 @@ class BlockResource:
 
         symbol_list = []
         for name, symbol in stock_table[block].items():
+            if 'ST' in name:
+                continue
             symbol_list.append(symbol)
 
         print('查询股票数据')
