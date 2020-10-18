@@ -3,6 +3,7 @@ from waitress import serve
 import falcon
 import json
 import pendulum
+import sys
 import pandas as pd
 from api import DataCollector, get_stock_k_data
 from CONSTANT import inustry_symbol_table_reverse,stock_table,stock_table_reverse
@@ -174,11 +175,16 @@ class BlockResource:
         :return: 
         """
         data = []
+        i = 0
         for each_symbol in symbol_list:
             each_stock_data = get_stock_k_data(each_symbol,begin,stop)
             if each_stock_data is None:
                 continue
             data.append(each_stock_data)
+            sys.stdout.write("\rPercent: %.2f%%" % (i/len(symbol_list)*100))
+            sys.stdout.flush()
+            i+=1
+        print('\n')
         all_stock_data = pd.concat(data)
         return all_stock_data
 
