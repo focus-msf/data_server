@@ -142,6 +142,7 @@ class BlockResource:
         symbol_list = []
         for name, symbol in stock_table[block].items():
             if 'ST' in name:
+                print('略掉 {}'.format(name))
                 continue
             symbol_list.append(symbol)
 
@@ -151,6 +152,9 @@ class BlockResource:
 
         # 整合 并 组成一个数组
         for name, symbol in stock_table[block].items():
+            # 略去st股票数据
+            if 'ST' in name:
+                continue
             ts_symbol=symbol_format(symbol)
             data_per_stock = (stock_data[stock_data['ts_code'] == ts_symbol]).loc[:,
                              ['trade_date', 'open', 'close', 'low', 'high']]
